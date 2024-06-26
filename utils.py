@@ -18,7 +18,9 @@ from plugins import (
     hf_tgi_plugin,
     openai_plugin,
     tgis_grpc_plugin,
-    azure_maap_plugin
+    azure_maap_plugin,
+    azure_openai_plugin,
+    azure_serverless_plugin
 )
 
 
@@ -86,6 +88,10 @@ def parse_config(config):
         plugin = dummy_plugin.DummyPlugin(config.get("plugin_options"))
     elif plugin_type == "azure_maap_plugin":
          plugin = azure_maap_plugin.AzureMaapPlugin(config.get("plugin_options"))
+    elif plugin_type == "azure_openai_plugin":
+         plugin = azure_openai_plugin.AzureOpenAIPlugin(config.get("plugin_options"))
+    elif plugin_type == "azure_serverless_plugin":
+         plugin = azure_serverless_plugin.AzureServerlessPlugin(config.get("plugin_options"))
     else:
         logging.error("Unknown plugin type %s", plugin_type)
         raise ValueError(f"Unknown plugin type {plugin_type}")
