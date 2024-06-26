@@ -20,7 +20,8 @@ from plugins import (
     tgis_grpc_plugin,
     azure_maap_plugin,
     azure_openai_plugin,
-    azure_serverless_plugin
+    azure_serverless_plugin,
+    azure_oai_embeddings_plugin,
 )
 
 
@@ -92,6 +93,8 @@ def parse_config(config):
          plugin = azure_openai_plugin.AzureOpenAIPlugin(config.get("plugin_options"))
     elif plugin_type == "azure_serverless_plugin":
          plugin = azure_serverless_plugin.AzureServerlessPlugin(config.get("plugin_options"))
+    elif plugin_type == "azure_oai_embeddings_plugin":
+         plugin = azure_oai_embeddings_plugin.AzureOpenAIEmbeddingPlugin(config.get("plugin_options"))
     else:
         logging.error("Unknown plugin type %s", plugin_type)
         raise ValueError(f"Unknown plugin type {plugin_type}")
