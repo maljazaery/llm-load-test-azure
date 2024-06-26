@@ -37,14 +37,14 @@ load_options:
 #  model_name: "Phi-3-medium-128k-instruct"
 #  key: "<key>"
 
-# Azure-OpenAI 
+# Azure-OpenAI-Embeddings
 plugin: "azure_oai_embeddings_plugin"
 plugin_options:
   streaming: True
-  url: "https://lllmops-aoai-sweden-c.openai.azure.com/"
-  key: "f94b89f443624a77a359cfa1b1f75afb"
-  deployment: "ada2-deployment"
-  api_version: "2024-02-01"
+  url: "<endpoint>"
+  key: "<key>"
+  deployment: "<deployment_name"
+  api_version: "<version>"
 
 
 extra_metadata:
