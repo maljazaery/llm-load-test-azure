@@ -1,0 +1,11 @@
+name: llm_load_test
+channels:
+  - conda-forge
+  - defaults
+  - jupyter
+dependencies:
+  - python=3.10
+  - pip
+  - ipykernel
+  - pip:
+    - -r requirements.txt
