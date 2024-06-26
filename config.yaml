@@ -38,13 +38,13 @@ load_options:
 #  key: "<key>"
 
 # Azure-OpenAI 
-plugin: "azure_openai_plugin"
+plugin: "azure_oai_embeddings_plugin"
 plugin_options:
   streaming: True
-  url: "https://aoai.openai.azure.com/"
-  key: "<key>"
-  deployment: "gpt-35-turbo"
-  api_version: "2023-03-15-preview"
+  url: "https://lllmops-aoai-sweden-c.openai.azure.com/"
+  key: "f94b89f443624a77a359cfa1b1f75afb"
+  deployment: "ada2-deployment"
+  api_version: "2024-02-01"
 
 
 extra_metadata:
