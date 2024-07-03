@@ -39,14 +39,14 @@ load_options:
 #  model_name: "Phi-3-medium-128k-instruct"
 #  key: "<key>"
 
-# Azure-OpenAI 
-plugin: "azure_openai_plugin"
+# Azure-OpenAI-Embeddings
+plugin: "azure_oai_embeddings_plugin"
 plugin_options:
   streaming: True
   url: "https://<endpoint>.openai.azure.com/"
   key: "<key>"
-  deployment: "gpt-35-turbo"
-  api_version: "2023-03-15-preview"
+  deployment: "<deployment_name"
+  api_version: "<version>"
 
 
 extra_metadata:
