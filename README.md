@@ -1,6 +1,21 @@
-# llm-load-test
+# azure-llm-load-test
 
-This tool is designed to load test large language models running in different runtimes / behind different APIs. 
+This tool is designed to load test large language models running in different runtimes / behind different Azure APIs. 
+
+## Features  
+- [x] Generate a custom testing dataset tailored to settings similar to your use case.  
+- [x] Load test with customizable concurrency, duration, and warmup options.  
+- [x] Support for various Azure AI models, including Azure OAI, Azure OAI Embedding, Azure Model Catalog serverless and managed.  
+- [x] Detailed results on throughput and latency statistics in JSON format.  
+- [x] Modular design, enabling developers to integrate new endpoints with minimal effort.
+- [ ] UI Support.  
+
+## Supported Azure Endpoints  
+- [x] Azure Model as a Platform (Managed Compute).   
+- [x] Azure Model as a Service (Serverless API).
+- [x] Azure-OpenAI.
+- [x] Azure-OpenAI-Embeddings.  
+- [ ] Cohere-Embeddings.
 
 ## Requirements
 
@@ -9,10 +24,10 @@ This tool is designed to load test large language models running in different ru
 ## Usage
 
 
-**Generate Dataset**:
+1- **Generate Dataset (Optional)**:
 
 ```sh  
-python datasets/generate_dataset.py --tok_input_length 10 --tok_output_length 50 --N 100 --output_file random_text_dataset.jsonl  
+python datasets/generate_dataset.py --tok_input_length 10 --tok_output_length 50 --N 100 --output_file datasets/random_text_dataset.jsonl  
 ```  
   
 - `--tok_input_length`: The length of the input.  
@@ -21,7 +36,8 @@ python datasets/generate_dataset.py --tok_input_length 10 --tok_output_length 50
 - `--output_file`: The name of the output file (default is `random_text_dataset.jsonl`).  
    
 
-**Running the Tool**:
+
+2- **Running the Tool**:
 ```
 usage: load_test.py [-h] [-c CONFIG] [-log {warn,warning,info,debug}]
 
@@ -35,38 +51,84 @@ optional arguments:
 
 ## Configuration Options
 
-The tool's behavior can be customized using a YAML configuration file. Take a look at `config.yaml` for an example. More documentation on this should be added in the future.
+The tool's behavior can be customized using a YAML configuration file. Take a look at `config.yaml` for an example. 
+   
+### Output  
+- **format**: Specifies the format of the output file. Currently supports "json". Future support for "pickle" may be added.  
+- **dir**: Directory where the output file will be saved.  
+- **file**: Name of the output file.  
+   
+### Warmup  
+- **warmup**: Boolean flag to enable or disable warmup requests before the actual load test.  
+- **warmup_options**:  
+  - **requests**: Number of warmup requests to send.  
+  - **timeout_sec**: Timeout for each warmup request in seconds.  
+   
+### Storage  
+- **type**: Specifies the type of storage. Currently, only "local" is supported. Future support for other storage types is planned.  
+   
+### Dataset  
+- **file**: Path to the dataset file in JSONL format. You can also auto-generate a dataset using `datasets/generate_dataset.py`.  
+- **max_queries**: Maximum number of queries to use from the dataset.  
+- **min_input_tokens**: Minimum number of input tokens per query.  
+- **max_input_tokens**: Maximum number of input tokens per query.  
+- **max_output_tokens**: Maximum number of output tokens per query.  
+- **max_sequence_tokens**: Maximum number of tokens in a sequence.  
+   
+### Load Options  
+- **type**: Type of load pattern. Currently supports "constant". Future options include "loadgen" and "stair-step".  
+- **concurrency**: Number of concurrent requests.  
+- **duration**: Duration of the load test in seconds. Future support for different time formats like "100s", "10m", etc., is planned.  
+   
+### Plugins and Endpoint Types  
+   
+#### Azure Model as a Platform (Managed Compute)
+- **plugin**: "azure_maap_plugin"  
+- **plugin_options**:  
+  - **url**: Endpoint URL for the Azure MaaP service.  
+  - **key**: API key for authentication.  
+  - **deployment**: Deployment name.  
+   
+#### Azure Model as a Service (Serverless API)
+- **plugin**: "azure_serverless_plugin"  
+- **plugin_options**:  
+  - **streaming**: Boolean flag to enable or disable streaming.  
+  - **url**: Endpoint URL for the Azure Serverless service. Don't forget to include `/v1/chat/completions`.  
+  - **model_name**: Name of the model.  
+  - **key**: API key for authentication.  
+   
+#### Azure-OpenAI  
+- **plugin**: "azure_openai_plugin"  
+- **plugin_options**:  
+  - **streaming**: Boolean flag to enable or disable streaming.  
+  - **url**: Endpoint URL for the Azure-OpenAI service.  
+  - **key**: API key for authentication.  
+  - **deployment**: Deployment name.  
+  - **api_version**: API version to use.  
+   
+#### Azure-OpenAI-Embeddings  
+- **plugin**: "azure_oai_embeddings_plugin"  
+- **plugin_options**:  
+  - **streaming**: Boolean flag to enable or disable streaming.  
+  - **url**: Endpoint URL for the Azure-OpenAI Embeddings service.  
+  - **key**: API key for authentication.  
+  - **deployment**: Deployment name.  
+  - **api_version**: API version to use.  
 
 
-**Results**:
+
+## Results:
 The tool will produce a results summary logged to stdout, and detailed test results along with its summary in json format.
 The json output will have following:
 1. Array of results with one element per request sent during the test. 
 2. Detailed summary report of the run.
-3. All the config metadata related to run 
+3. All the config metadata related to run. 
 
 For example:
 
 ```
 "results": [
 ...
-    {
-      "user_id": 7,
-      "input_text": "...",
-      "input_tokens": 940,
-      "output_text": "...",
-      "output_tokens": 128,
-      "start_time": 1708535304.5261629,
-      "ack_time": 1708535304.691414,
-      "first_token_time": 1708535304.95455,
-      "end_time": 1708535309.094971,
-      "response_time": 4568.808078765869,
-      "tt_ack": 165.2512550354004,
-      "ttft": 428.3871650695801,
-      "tpot": 32.60173947792354,
-      "error_code": null,
-      "error_text": null
-    }
   ],
   "config": {
 ...
@@ -77,7 +139,17 @@ For example:
 ...
   },
   "summary": {
-    "tpot": { #time per ouput_token
+    "output_tokens_throughput": 159.25729928295627,
+    "input_tokens_throughput": 1592.5729928295625,
+    "full_duration": 20.093270540237427,
+    "total_requests": 16,
+    "complete_request_per_sec": 0.7962864964147813,
+    "total_failures": 0,
+    "failure_rate": 0.0
+
+
+    #time per ouput_token
+    "tpot": { 
       "min": 0.010512285232543946,
       "max": 0.018693844079971312,
       "median": 0.01216195583343506,
@@ -87,7 +159,8 @@ For example:
       "percentile_95": 0.017840550780296324,
       "percentile_99": 0.018523185420036312
     },
-    "ttft": { #time to first token
+     #time to first token
+    "ttft": {
       "min": 0.4043765068054199,
       "max": 0.5446293354034424,
       "median": 0.46433258056640625,
@@ -97,7 +170,8 @@ For example:
       "percentile_95": 0.5295632600784301,
       "percentile_99": 0.54161612033844
     },
-    "itl": { #input token latency
+    #input token latency
+    "itl": { 
       "min": 0.008117493672586566,
       "max": 0.01664590356337964,
       "median": 0.009861880810416522,
@@ -107,7 +181,8 @@ For example:
       "percentile_95": 0.015781731761280615,
       "percentile_99": 0.016473069202959836
     },
-    "tt_ack": { #time to ack
+    #time to ack
+    "tt_ack": { 
       "min": 0.404374361038208,
       "max": 0.544623851776123,
       "median": 0.464330792427063,
@@ -147,13 +222,7 @@ For example:
       "percentile_95": 2000.0,
       "percentile_99": 2000.0
     },
-    "output_tokens_throughput": 159.25729928295627,
-    "input_tokens_throughput": 1592.5729928295625,
-    "full_duration": 20.093270540237427,
-    "total_requests": 16,
-    "complete_request_per_sec": 0.7962864964147813,
-    "total_failures": 0,
-    "failure_rate": 0.0
+    
   }
 }
 ```
