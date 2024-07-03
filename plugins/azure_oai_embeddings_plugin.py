@@ -4,6 +4,7 @@ import time
 
 import requests
 import urllib3
+from openai import RateLimitError
 
 from plugins import plugin
 from result import RequestResult
@@ -57,7 +58,8 @@ class AzureOpenAIEmbeddingPlugin(plugin.Plugin):
         client = AzureOpenAI(
                 api_key=self.key,  
                 api_version=self.version,
-                azure_endpoint = self.host
+                azure_endpoint = self.host,
+                max_retries=0
             )
 
         input = query.get("text")
@@ -65,12 +67,12 @@ class AzureOpenAIEmbeddingPlugin(plugin.Plugin):
         try:
             response = client.embeddings.create(model=self.model_name, input=input)
 
-        except requests.exceptions.ConnectionError as err:
+        except RateLimitError as err:
             result.end_time = time.time()
             result.error_text = repr(err)
             if response is not None:
                 result.error_code = response.status_code
-            logger.exception("Connection error")
+            logger.exception("RateLimitError error")
             return result
         except requests.exceptions.HTTPError as err:
             result.end_time = time.time()
