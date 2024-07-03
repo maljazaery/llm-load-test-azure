@@ -74,8 +74,8 @@ class AzureServerlessPlugin(plugin.Plugin):
                 "top_p": 0.9,
                 "seed": 10,
             }
-        if self.model_name is not None:
-            data["model"] = self.model_name
+        #if self.model_name is not None:
+        #    data["model"] = self.model_name
 
         response = None
         try:
@@ -153,8 +153,8 @@ class AzureServerlessPlugin(plugin.Plugin):
             }
 
         # some runtimes only serve one model, won't check this.
-        if self.model_name is not None:
-            data["model"] = self.model_name
+        #if self.model_name is not None:
+        #    data["model"] = self.model_name
 
         result = RequestResult(user_id, query.get("input_id"), query.get("input_tokens"))
 
@@ -225,7 +225,8 @@ class AzureServerlessPlugin(plugin.Plugin):
                 if not result.first_token_time and token != "":
                     result.first_token_time = time.time()
 
-                tokens.append(token)
+                if token:
+                    tokens.append(token)
                 
                 # If the current token time is outside the test duration, record the total tokens received before
                 # the current token.
@@ -238,8 +239,7 @@ class AzureServerlessPlugin(plugin.Plugin):
 
                 # Last token comes with finish_reason set.
                 if message.get("choices", [])[0].get("finish_reason", None):
-                    result.output_tokens = message["usage"]["completion_tokens"]
-                    result.input_tokens = message["usage"]["prompt_tokens"]
+                    result.output_tokens = len(tokens)
                     result.stop_reason =  message["choices"][0]["finish_reason"]
 
                     # If test duration timeout didn't happen before the last token is received, 
