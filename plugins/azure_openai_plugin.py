@@ -8,6 +8,7 @@ import urllib3
 from plugins import plugin
 from result import RequestResult
 from openai import AzureOpenAI
+from openai import RateLimitError
 
 urllib3.disable_warnings()
 """
@@ -59,7 +60,8 @@ class AzureOpenAIPlugin(plugin.Plugin):
         client = AzureOpenAI(
                 api_key=self.key,  
                 api_version=self.version,
-                azure_endpoint = self.host
+                azure_endpoint = self.host,
+                max_retries=0
             )
 
         messages=[
@@ -76,12 +78,12 @@ class AzureOpenAIPlugin(plugin.Plugin):
                                                  stream=self.stream
                                                  )
 
-        except requests.exceptions.ConnectionError as err:
+        except RateLimitError as err:
             result.end_time = time.time()
             result.error_text = repr(err)
             if response is not None:
                 result.error_code = response.status_code
-            logger.exception("Connection error")
+            logger.exception("RateLimitError error")
             return result
         except requests.exceptions.HTTPError as err:
             result.end_time = time.time()
