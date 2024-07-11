@@ -5,7 +5,7 @@ This tool is designed to load test large language models running in different ru
 ## Features  
 - [x] Generate a custom testing dataset tailored to settings similar to your use case.  
 - [x] Load test with customizable concurrency, duration, and warmup options.  
-- [x] Support for various Azure AI models, including Azure OAI, Azure OAI Embedding, Azure Model Catalog serverless and managed.  
+- [x] Support for various Azure AI models, including Azure OAI, Azure OAI Embedding, Azure Model Catalog serverless and managed-compute.  
 - [x] Detailed results on throughput and latency statistics in JSON format.  
 - [x] Modular design, enabling developers to integrate new endpoints with minimal effort.
 - [ ] UI Support.  
