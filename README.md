@@ -109,7 +109,6 @@ The tool's behavior can be customized using a YAML configuration file. Take a lo
 #### Azure-OpenAI-Embeddings  
 - **plugin**: "azure_oai_embeddings_plugin"  
 - **plugin_options**:  
-  - **streaming**: Boolean flag to enable or disable streaming.  
   - **url**: Endpoint URL for the Azure-OpenAI Embeddings service.  
   - **key**: API key for authentication.  
   - **deployment**: Deployment name.  
