@@ -27,7 +27,7 @@ This tool is designed to load test large language models running in different ru
 1- **Generate Dataset (Optional)**:
 
 ```sh  
-python datasets/generate_dataset.py --tok_input_length 10 --tok_output_length 50 --N 100 --output_file datasets/random_text_dataset.jsonl  
+python datasets/generate_dataset.py --tok_input_length 250 --tok_output_length 50 --N 100 --output_file datasets/random_text_dataset.jsonl  
 ```  
   
 - `--tok_input_length`: The length of the input.  
