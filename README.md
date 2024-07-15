@@ -30,7 +30,7 @@ This tool is designed to load test large language models running in different ru
 python datasets/generate_dataset.py --tok_input_length 250 --tok_output_length 50 --N 100 --output_file datasets/random_text_dataset.jsonl  
 ```  
   
-- `--tok_input_length`: The length of the input.  
+- `--tok_input_length`: The length of the input.  minimum 25.
 - `--tok_output_length`: The length of the output.  
 - `--N`: The number of samples to generate.  
 - `--output_file`: The name of the output file (default is `random_text_dataset.jsonl`).  
