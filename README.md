@@ -142,7 +142,7 @@ For example:
     "input_tokens_throughput": 1592.5729928295625,
     "full_duration": 20.093270540237427,
     "total_requests": 16,
-    "complete_request_per_sec": 0.7962864964147813,
+    "complete_request_per_sec": 0.79,  # number of competed requests / full_duration 
     "total_failures": 0,
     "failure_rate": 0.0
 
