@@ -42,7 +42,6 @@ load_options:
 # Azure-OpenAI-Embeddings
 plugin: "azure_oai_embeddings_plugin"
 plugin_options:
-  streaming: True
   url: "https://<endpoint>.openai.azure.com/"
   key: "<key>"
   deployment: "<deployment_name"
