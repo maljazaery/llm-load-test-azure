@@ -8,7 +8,8 @@ This tool is designed to load test large language models running in different ru
 - [x] Support for various Azure AI models, including Azure OAI, Azure OAI Embedding, Azure Model Catalog serverless and managed-compute.  
 - [x] Detailed results on throughput and latency statistics in JSON format.  
 - [x] Modular design, enabling developers to integrate new endpoints with minimal effort.
-- [ ] UI Support.  
+- [ ] UI Support.
+- [ ] Batch support for embedding endpoints.
 
 ## Supported Azure Endpoints  
 - [x] Azure Model as a Platform (Managed Compute).   
