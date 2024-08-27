@@ -9,15 +9,12 @@ import os
 import numpy as np
 import pandas as pd
 import yaml
+import warnings
 
 os.environ["OPENBLAS_NUM_THREADS"] = "1"
 
 from plugins import (
-    caikit_client_plugin,
-    dummy_plugin,
-    hf_tgi_plugin,
-    openai_plugin,
-    tgis_grpc_plugin,
+    
     azure_maap_plugin,
     azure_openai_plugin,
     azure_serverless_plugin,
@@ -75,19 +72,8 @@ def parse_config(config):
     duration = load_options.get("duration")
 
     plugin_type = config.get("plugin")
-    if plugin_type == "openai_plugin":
-        plugin = openai_plugin.OpenAIPlugin(
-            config.get("plugin_options")
-        )
-    elif plugin_type == "caikit_client_plugin":
-        plugin = caikit_client_plugin.CaikitClientPlugin(config.get("plugin_options"))
-    elif plugin_type == "tgis_grpc_plugin":
-        plugin = tgis_grpc_plugin.TGISGRPCPlugin(config.get("plugin_options"))
-    elif plugin_type == "hf_tgi_plugin":
-        plugin = hf_tgi_plugin.HFTGIPlugin(config.get("plugin_options"))
-    elif plugin_type == "dummy_plugin":
-        plugin = dummy_plugin.DummyPlugin(config.get("plugin_options"))
-    elif plugin_type == "azure_maap_plugin":
+    
+    if plugin_type == "azure_maap_plugin":
          plugin = azure_maap_plugin.AzureMaapPlugin(config.get("plugin_options"))
     elif plugin_type == "azure_openai_plugin":
          plugin = azure_openai_plugin.AzureOpenAIPlugin(config.get("plugin_options"))
@@ -243,12 +229,14 @@ def write_output(config, results_list):
 
 def get_summary(df: pd.DataFrame, output_obj: dict, summary_key: str):
     output_obj["summary"][summary_key] = {}
-    output_obj["summary"][summary_key]["min"] = df[summary_key].min()
-    output_obj["summary"][summary_key]["max"] = df[summary_key].max()
-    output_obj["summary"][summary_key]["median"] = df[summary_key].median()
-    output_obj["summary"][summary_key]["mean"] = df[summary_key].mean()
-    output_obj["summary"][summary_key]["percentile_80"] = df[summary_key].quantile(0.80)
-    output_obj["summary"][summary_key]["percentile_90"] = df[summary_key].quantile(0.90)
-    output_obj["summary"][summary_key]["percentile_95"] = df[summary_key].quantile(0.95)
-    output_obj["summary"][summary_key]["percentile_99"] = df[summary_key].quantile(0.99)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", category=RuntimeWarning)
+        output_obj["summary"][summary_key]["min"] = df[summary_key].min()
+        output_obj["summary"][summary_key]["max"] = df[summary_key].max()
+        output_obj["summary"][summary_key]["median"] = df[summary_key].median()
+        output_obj["summary"][summary_key]["mean"] = df[summary_key].mean()
+        output_obj["summary"][summary_key]["percentile_80"] = df[summary_key].quantile(0.80)
+        output_obj["summary"][summary_key]["percentile_90"] = df[summary_key].quantile(0.90)
+        output_obj["summary"][summary_key]["percentile_95"] = df[summary_key].quantile(0.95)
+        output_obj["summary"][summary_key]["percentile_99"] = df[summary_key].quantile(0.99)
     return output_obj
