@@ -11,6 +11,9 @@ This tool is designed to load test large language models running in different ru
 - [ ] UI Support.
 - [ ] Batch support for embedding endpoints.
 
+## Limitations
+ We are using cl100k_base encoder from "tiktoken" package to count tokens. To change the token encoder,  you can modify the function "num_tokens_from_string" in "plugins/plugin.py"
+
 ## Supported Azure Endpoints  
 - [x] Azure Model as a Platform (Managed Compute).   
 - [x] Azure Model as a Service (Serverless API).
