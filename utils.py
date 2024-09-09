@@ -214,6 +214,10 @@ def write_output(config, results_list):
         f" Completed Request throughput: {req_throughput_full_duration } request / sec, for duration {full_duration}"
     )
 
+    print(
+        f" Completed Request throughput: {req_throughput_full_duration * 60} request / min"
+    )
+
     output_obj["summary"]["output_tokens_throughput"] = throughput_full_duration
     output_obj["summary"]["input_tokens_throughput"] = in_throughput_full_duration
     output_obj["summary"]["full_duration"] = full_duration

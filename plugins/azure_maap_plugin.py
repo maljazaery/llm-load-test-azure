@@ -80,14 +80,14 @@ class AzureMaapPlugin(plugin.Plugin):
             result.error_text = repr(err)
             if response is not None:
                 result.error_code = response.status_code
-            logger.exception("Connection error")
+            logger.error(result.error_text)
             return result
         except requests.exceptions.HTTPError as err:
             result.end_time = time.time()
             result.error_text = repr(err)
             if response is not None:
                 result.error_code = response.status_code
-            logger.exception("HTTP error")
+            logger.error(result.error_text)
             return result
 
         result.end_time = time.time()
@@ -104,10 +104,10 @@ class AzureMaapPlugin(plugin.Plugin):
             result.input_tokens = self.num_tokens_from_string(query.get("text"))
             result.stop_reason =  ""
         except json.JSONDecodeError:
-            logger.exception("Response could not be json decoded: %s", response.text)
+            logger.error("Response could not be json decoded: %s", response.text)
             result.error_text = f"Response could not be json decoded {response.text}"
         except KeyError:
-            logger.exception("KeyError, unexpected response format: %s", response.text)
+            logger.error("KeyError, unexpected response format: %s", response.text)
             result.error_text = f"KeyError, unexpected response format: {response.text}"
 
         # For non-streaming requests we are keeping output_tokens_before_timeout and output_tokens same.

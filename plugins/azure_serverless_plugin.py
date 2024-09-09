@@ -86,14 +86,14 @@ class AzureServerlessPlugin(plugin.Plugin):
             result.error_text = repr(err)
             if response is not None:
                 result.error_code = response.status_code
-            logger.exception("Connection error")
+            logger.error(result.error_text)
             return result
         except requests.exceptions.HTTPError as err:
             result.end_time = time.time()
             result.error_text = repr(err)
             if response is not None:
                 result.error_code = response.status_code
-            logger.exception("HTTP error")
+            logger.error(result.error_text)
             return result
 
         result.end_time = time.time()
@@ -117,10 +117,10 @@ class AzureServerlessPlugin(plugin.Plugin):
                 result.error_text = error
                 logger.error("Error received in response message: %s", error)
         except json.JSONDecodeError:
-            logger.exception("Response could not be json decoded: %s", response.text)
+            logger.error("Response could not be json decoded: %s", response.text)
             result.error_text = f"Response could not be json decoded {response.text}"
         except KeyError:
-            logger.exception("KeyError, unexpected response format: %s", response.text)
+            logger.error("KeyError, unexpected response format: %s", response.text)
             result.error_text = f"KeyError, unexpected response format: {response.text}"
 
         # For non-streaming requests we are keeping output_tokens_before_timeout and output_tokens same.
@@ -171,14 +171,14 @@ class AzureServerlessPlugin(plugin.Plugin):
             result.error_text = repr(err)
             if response is not None:
                 result.error_code = response.status_code
-            logger.exception("Connection error")
+            logger.error("Connection error")
             return result
         except requests.exceptions.HTTPError as err:
             result.end_time = time.time()
             result.error_text = repr(err)
             if response is not None:
                 result.error_code = response.status_code
-            logger.exception("HTTP error")
+            logger.error("HTTP error")
             return result
 
         logger.debug("Response: %s", response)
@@ -207,9 +207,9 @@ class AzureServerlessPlugin(plugin.Plugin):
                         logger.error("Error received in response message: %s", error)
                         break
                 except json.JSONDecodeError:
-                    logger.exception("Response line could not be json decoded: %s", line)
+                    logger.error("Response line could not be json decoded: %s", line)
                 except KeyError:
-                    logger.exception(
+                    logger.error(
                         "KeyError, unexpected response format in line: %s", line
                     )
                     continue
