@@ -11,10 +11,10 @@ storage: # TODO
 dataset:
   file: "datasets/openorca_large_subset_011.jsonl" # or you can auto-generate using datasets/generate_dataset.py
   #use below params to filter the dataset
-  max_queries: 1000 
+  max_queries: 10000 
   min_input_tokens: 0
-  max_input_tokens: 10000
-  max_output_tokens: 512
+  max_input_tokens: 100000
+  max_output_tokens: 5120
   max_sequence_tokens: 10000
   
 load_options:
